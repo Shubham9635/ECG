@@ -1,6 +1,0 @@
-com.cardioconnect.app-updated_navigation_xml-0 /Users/shubhamgupta/Desktop/ECG/app/build/generated/updated_navigation_xml/debug
-com.cardioconnect.app-packageDebugResources-1 /Users/shubhamgupta/Desktop/ECG/app/build/intermediates/incremental/debug/packageDebugResources/merged.dir
-com.cardioconnect.app-packageDebugResources-2 /Users/shubhamgupta/Desktop/ECG/app/build/intermediates/incremental/debug/packageDebugResources/stripped.dir
-com.cardioconnect.app-debug-3 /Users/shubhamgupta/Desktop/ECG/app/build/intermediates/merged_res/debug/mergeDebugResources
-com.cardioconnect.app-debug-4 /Users/shubhamgupta/Desktop/ECG/app/src/debug/res
-com.cardioconnect.app-main-5 /Users/shubhamgupta/Desktop/ECG/app/src/main/res

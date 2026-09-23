@@ -58,10 +58,14 @@ const server = http.createServer((req, res) => {
     });
 });
 
-server.listen(PORT, '0.0.0.0', () => {
-    console.log(`\n======================================================`);
-    console.log(`  CardioConnect ECG Monitor is live!`);
-    console.log(`  Local URL:   http://localhost:${PORT}`);
-    console.log(`  Network URL: http://127.0.0.1:${PORT}`);
-    console.log(`======================================================\n`);
-});
+if (require.main === module) {
+    server.listen(PORT, '0.0.0.0', () => {
+        console.log(`\n======================================================`);
+        console.log(`  CardioConnect ECG Monitor is live!`);
+        console.log(`  Local URL:   http://localhost:${PORT}`);
+        console.log(`  Network URL: http://127.0.0.1:${PORT}`);
+        console.log(`======================================================\n`);
+    });
+}
+
+module.exports = server;

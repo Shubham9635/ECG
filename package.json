@@ -2,10 +2,9 @@
   "name": "cardioconnect",
   "version": "1.0.0",
   "description": "CardioConnect - Hospital-Grade ECG & Multi-Parameter Telemetry Monitor",
-  "main": "server.js",
   "scripts": {
     "dev": "node server.js",
-    "start": "node server.js"
+    "build": "echo 'Static build complete'"
   },
   "keywords": [
     "ecg",
