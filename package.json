@@ -4,7 +4,7 @@
   "description": "CardioConnect - Hospital-Grade ECG & Multi-Parameter Telemetry Monitor",
   "scripts": {
     "dev": "node server.js",
-    "build": "echo 'Static build complete'"
+    "build": "mkdir -p public && cp index.html index.css app.js public/"
   },
   "keywords": [
     "ecg",
