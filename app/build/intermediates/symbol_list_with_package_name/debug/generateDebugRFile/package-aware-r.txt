@@ -1,0 +1,24 @@
+com.cardioconnect
+drawable atcoder
+drawable codechef
+drawable codeforces
+drawable coderbyte
+drawable codewars
+drawable codingblocks
+drawable gfg
+drawable google_logo
+drawable hackerearth
+drawable hackerrank
+drawable ic_launcher_background
+drawable ic_launcher_foreground
+drawable leetcode
+drawable projecteuler
+drawable topcoder
+mipmap ic_launcher
+mipmap ic_launcher_round
+string app_name
+string app_subtitle
+string medical_disclaimer_full
+string medical_disclaimer_short
+style Theme_CardioConnect
+xml file_paths

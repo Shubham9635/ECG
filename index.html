@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>CardioConnect - Clinical ECG &amp; Telemetry Monitor</title>
+    <meta name="description" content="CardioConnect is a hospital-grade ECG and multi-parameter cardiac telemetry monitoring system.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <!-- App Container -->
+    <div class="app-viewport">
+        <!-- Top App Bar -->
+        <header class="top-bar">
+            <div class="brand-group">
+                <div class="heartbeat-dot"></div>
+                <div class="brand-text">
+                    <h1 class="brand-title">CardioConnect</h1>
+                    <span class="brand-sub">Bedside ECG Telemetry</span>
+                </div>
+            </div>
+
+            <div class="header-actions">
+                <div id="deviceStatusBadge" class="status-pill demo-mode">
+                    <span class="status-indicator"></span>
+                    <span id="deviceStatusText">DEMO DATA — NOT REAL ECG</span>
+                </div>
+                <button id="viewModeBtn" class="icon-btn" title="Toggle Fullscreen Monitor">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- Alert Notification Bar -->
+        <div id="alertContainer" class="alert-container">
+            <div id="activeAlert" class="alert-banner warning hidden">
+                <div class="alert-icon">⚠️</div>
+                <div class="alert-content">
+                    <strong id="alertTitle">ECG Signal Alert</strong>
+                    <span id="alertMessage">Lead contact interrupted. Check skin electrodes.</span>
+                </div>
+                <button id="dismissAlertBtn" class="alert-close">&times;</button>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- TAB 1: DASHBOARD -->
+            <section id="tabDashboard" class="tab-pane active">
+                <!-- Patient Profile Card -->
+                <div class="card patient-profile-card">
+                    <div class="patient-main-row">
+                        <div class="patient-avatar-box">
+                            <span class="patient-avatar-icon">👤</span>
+                        </div>
+                        <div class="patient-details-col">
+                            <div class="patient-name-row">
+                                <strong id="patName" class="pat-name">Rahul Sharma</strong>
+                                <span id="patDemographics" class="pat-badge">52y • Male</span>
+                            </div>
+                            <div class="patient-sub-row">
+                                <span id="patId" class="pat-id">ID: P-10245</span>
+                                <span class="pat-sep">•</span>
+                                <span id="patBlood" class="pat-blood">Blood: B+</span>
+                                <span class="pat-sep">•</span>
+                                <span id="patClinician" class="pat-clinician">Dr. Amit Verma</span>
+                            </div>
+                        </div>
+                        <div class="patient-actions-group" style="display: flex; align-items: center; gap: 6px;">
+                            <button id="quickSwitchPatientBtn" class="pill-btn secondary-btn" style="padding: 4px 10px; font-size: 11px;">Switch</button>
+                            <button id="openPatientEditBtn" class="icon-btn edit-pat-btn" title="Edit Patient Details">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Live ECG Canvas Card -->
+                <div class="card ecg-monitor-card">
+                    <div class="ecg-monitor-header">
+                        <div class="lead-info">
+                            <span class="lead-badge" id="dashLeadBadge">LEAD II</span>
+                            <span class="filter-badge">0.05 - 40 Hz</span>
+                            <span class="calib-badge" id="dashCalibBadge">25 mm/s • 10 mm/mV</span>
+                        </div>
+                        <div class="monitor-quick-actions">
+                            <button id="dashPauseBtn" class="pill-btn secondary-btn" title="Pause / Resume trace">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+                                <span id="dashPauseText">Pause</span>
+                            </button>
+                            <button id="dashFullscreenBtn" class="pill-btn secondary-btn">
+                                <span>Expand</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="canvas-wrapper">
+                        <canvas id="ecgCanvasDashboard"></canvas>
+                        <div class="caliper-tag">1 mV</div>
+                    </div>
+                </div>
+
+                <!-- Session Recording Ribbon -->
+                <div class="card recording-ribbon">
+                    <div class="recording-info">
+                        <div id="recBlinker" class="rec-dot hidden"></div>
+                        <div class="rec-labels">
+                            <span class="rec-title" id="recTitleText">Session Telemetry</span>
+                            <span class="rec-timer" id="recTimerText">Ready to record</span>
+                        </div>
+                    </div>
+                    <div class="recording-actions">
+                        <button id="markEventBtn" class="pill-btn secondary-btn hidden">Mark Event</button>
+                        <button id="toggleRecordBtn" class="pill-btn primary-btn">
+                            <span class="rec-btn-dot">●</span>
+                            <span id="recordBtnLabel">Start Recording</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Heart Rate Primary Card -->
+                <div class="card hr-primary-card">
+                    <div class="card-header-row">
+                        <div class="card-title-group">
+                            <svg class="heart-pulse-svg" width="20" height="20" viewBox="0 0 24 24" fill="#FF3D71">
+                                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                            </svg>
+                            <span class="card-title">HEART RATE</span>
+                        </div>
+                        <div id="signalBadge" class="signal-chip good">
+                            <span class="signal-dot"></span>
+                            <span id="signalText">GOOD SIGNAL</span>
+                        </div>
+                    </div>
+
+                    <div class="hr-main-display">
+                        <span id="hrValue" class="hr-digits">78</span>
+                        <span class="hr-unit">BPM</span>
+                    </div>
+
+                    <div class="hr-stats-row">
+                        <div class="stat-col">
+                            <span class="stat-label">AVG</span>
+                            <span id="hrAvg" class="stat-val">76 bpm</span>
+                        </div>
+                        <div class="stat-col">
+                            <span class="stat-label">MIN</span>
+                            <span id="hrMin" class="stat-val">68 bpm</span>
+                        </div>
+                        <div class="stat-col">
+                            <span class="stat-label">MAX</span>
+                            <span id="hrMax" class="stat-val">88 bpm</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ECG Interpretation Card with Risk/Attention Status Indicator -->
+                <div class="card interpretation-card">
+                    <div class="interp-header">
+                        <span class="interp-title">ECG INTERPRETATION</span>
+                        <div id="riskStatusChip" class="risk-chip normal">
+                            <span class="risk-dot"></span>
+                            <span id="riskStatusLabel">🟢 No significant device/algorithm finding</span>
+                        </div>
+                    </div>
+
+                    <div class="interp-rhythm-box">
+                        <span class="interp-sublabel">DETECTED RHYTHM (VALIDATED ALGORITHM)</span>
+                        <strong id="interpRhythmTitle" class="interp-rhythm-name">Normal Sinus Rhythm</strong>
+                        <span class="interp-algo-tag">Algorithm Source: Validated Automated Classifier v2.4</span>
+                    </div>
+
+                    <div class="findings-section">
+                        <span class="interp-sublabel">FINDINGS &amp; PATTERNS (Tap for clinical context)</span>
+                        <div id="findingsList" class="findings-list">
+                            <!-- Populated dynamically via JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ECG Interval Measurements Card -->
+                <div class="card measurements-card">
+                    <div class="measurements-header">
+                        <span class="interp-title">ECG INTERVAL MEASUREMENTS</span>
+                        <button id="openConditionsGuideBtn" class="pill-btn secondary-btn" style="padding: 4px 8px; font-size: 10px;">
+                            📚 ECG Conditions Guide
+                        </button>
+                    </div>
+
+                    <div class="intervals-grid">
+                        <div class="interval-cell">
+                            <span class="i-label">Heart Rate</span>
+                            <strong id="measHr" class="i-val">78 BPM</strong>
+                        </div>
+                        <div class="interval-cell">
+                            <span class="i-label">PR Interval</span>
+                            <strong id="measPr" class="i-val">160 ms</strong>
+                        </div>
+                        <div class="interval-cell">
+                            <span class="i-label">QRS Duration</span>
+                            <strong id="measQrs" class="i-val">92 ms</strong>
+                        </div>
+                        <div class="interval-cell">
+                            <span class="i-label">QT Interval</span>
+                            <strong id="measQt" class="i-val">380 ms</strong>
+                        </div>
+                        <div class="interval-cell">
+                            <span class="i-label">QTc (Bazett)</span>
+                            <strong id="measQtc" class="i-val">410 ms</strong>
+                        </div>
+                        <div class="interval-cell">
+                            <span class="i-label">RR Interval</span>
+                            <strong id="measRr" class="i-val">770 ms</strong>
+                        </div>
+                    </div>
+
+                    <div class="morphology-strip">
+                        <div class="m-row"><span>P-Wave:</span> <strong id="measPwave">Normal upright in Lead II</strong></div>
+                        <div class="m-row"><span>QRS Morphology:</span> <strong id="measQrsMorph">Narrow QRS (&lt;120 ms)</strong></div>
+                        <div class="m-row"><span>ST-Segment:</span> <strong id="measSt">Isoelectric (no acute deviation)</strong></div>
+                        <div class="m-row"><span>Rhythm Regularity:</span> <strong id="measRegularity">Regular</strong></div>
+                    </div>
+                </div>
+
+                <!-- Multi-Parameter Vitals Grid -->
+                <div class="vitals-grid">
+                    <!-- SpO2 -->
+                    <div class="card vital-card">
+                        <div class="vital-header">
+                            <span class="vital-name">SpO₂</span>
+                            <span class="vital-icon cyan">💨</span>
+                        </div>
+                        <div class="vital-value-row">
+                            <span id="spo2Val" class="vital-digit">98</span>
+                            <span class="vital-unit cyan">%</span>
+                        </div>
+                        <span class="vital-note">Oxygen Saturation</span>
+                    </div>
+
+                    <!-- Blood Pressure -->
+                    <div class="card vital-card">
+                        <div class="vital-header">
+                            <span class="vital-name">NIBP</span>
+                            <span class="vital-icon blue">⚡</span>
+                        </div>
+                        <div class="vital-value-row">
+                            <span id="bpVal" class="vital-digit">120/80</span>
+                            <span class="vital-unit blue">mmHg</span>
+                        </div>
+                        <span id="mapVal" class="vital-note">MAP: 93 mmHg</span>
+                    </div>
+
+                    <!-- Temperature -->
+                    <div class="card vital-card">
+                        <div class="vital-header">
+                            <span class="vital-name">TEMP</span>
+                            <span class="vital-icon amber">🌡️</span>
+                        </div>
+                        <div class="vital-value-row">
+                            <span id="tempVal" class="vital-digit">36.7</span>
+                            <span class="vital-unit amber">°C</span>
+                        </div>
+                        <span class="vital-note">Skin Sensor</span>
+                    </div>
+
+                    <!-- Battery & Connection -->
+                    <div class="card vital-card">
+                        <div class="vital-header">
+                            <span class="vital-name" id="deviceCardTitle">SIMULATOR</span>
+                            <span class="vital-icon green">🔋</span>
+                        </div>
+                        <div class="vital-value-row">
+                            <span id="batteryVal" class="vital-digit">94%</span>
+                            <span class="vital-unit green">RSSI -54</span>
+                        </div>
+                        <span id="deviceNameVal" class="vital-note">Simulated CardioConnect</span>
+                    </div>
+                </div>
+
+                <!-- Medical Disclaimer Notice -->
+                <div class="card notice-card">
+                    <span class="notice-icon">ℹ️</span>
+                    <p class="notice-text">
+                        <strong>Prototype ECG Monitoring Application:</strong> Data displayed is for information/telemetry purposes only and is not a clinical medical diagnosis.
+                    </p>
+                </div>
+            </section>
+ 
+            <!-- TAB: PATIENTS DIRECTORY -->
+            <section id="tabPatients" class="tab-pane">
+                <div class="section-header-row">
+                    <div>
+                        <h2 class="section-title">Patients Directory</h2>
+                        <span id="patientCountSubtitle" class="section-sub">3 Registered Patients • Active: Rahul Sharma</span>
+                    </div>
+                    <button id="openAddPatientModalBtn" class="pill-btn primary-btn">+ Add Patient</button>
+                </div>
+
+                <!-- Search Bar -->
+                <div class="search-bar-wrap">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    <input type="text" id="patientSearchInput" placeholder="Search by name, ID, phone, or clinician..." class="styled-input search-input">
+                </div>
+
+                <!-- Patient Cards List -->
+                <div id="patientCardsContainer" class="patients-list">
+                    <!-- Populated dynamically via JS -->
+                </div>
+            </section>
+
+            <!-- TAB 2: LIVE ECG FULLSCREEN -->
+            <section id="tabLive" class="tab-pane">
+                <div class="live-full-container">
+                    <div class="live-top-ribbon">
+                        <div class="live-lead-controls">
+                            <select id="leadSelect" class="styled-select">
+                                <option value="LEAD_I">Lead I</option>
+                                <option value="LEAD_II" selected>Lead II</option>
+                                <option value="LEAD_III">Lead III</option>
+                                <option value="AVR">aVR</option>
+                                <option value="AVL">aVL</option>
+                                <option value="AVF">aVF</option>
+                                <option value="V1">V1</option>
+                                <option value="V2">V2</option>
+                                <option value="V3">V3</option>
+                                <option value="V4">V4</option>
+                                <option value="V5">V5</option>
+                                <option value="V6">V6</option>
+                            </select>
+
+                            <select id="speedSelect" class="styled-select">
+                                <option value="12.5">12.5 mm/s</option>
+                                <option value="25" selected>25 mm/s</option>
+                                <option value="50">50 mm/s</option>
+                            </select>
+
+                            <select id="gainSelect" class="styled-select">
+                                <option value="5">5 mm/mV (0.5x)</option>
+                                <option value="10" selected>10 mm/mV (1.0x)</option>
+                                <option value="20">20 mm/mV (2.0x)</option>
+                            </select>
+                        </div>
+
+                        <div class="live-status-group">
+                            <span id="liveRecBadge" class="rec-chip hidden">REC ● <span id="liveRecTimer">00:00</span></span>
+                        </div>
+                    </div>
+
+                    <!-- Large Fullscreen Canvas -->
+                    <div class="live-canvas-box">
+                        <canvas id="ecgCanvasLive"></canvas>
+                        <div class="live-caliper">1 mV Calibration</div>
+                    </div>
+
+                    <!-- Bottom Live Vitals Strip -->
+                    <div class="live-bottom-bar">
+                        <div class="live-metric-card">
+                            <span class="m-label">HR</span>
+                            <div class="m-val-row">
+                                <strong id="liveHr" class="m-digit">78</strong>
+                                <span class="m-unit">BPM</span>
+                            </div>
+                        </div>
+
+                        <div class="live-metric-card">
+                            <span class="m-label">SIGNAL</span>
+                            <strong id="liveSignal" class="m-digit text-green">GOOD</strong>
+                        </div>
+
+                        <div class="live-metric-card">
+                            <span class="m-label">SpO₂</span>
+                            <div class="m-val-row">
+                                <strong id="liveSpo2" class="m-digit">98</strong>
+                                <span class="m-unit">%</span>
+                            </div>
+                        </div>
+
+                        <div class="live-metric-card">
+                            <span class="m-label">NIBP</span>
+                            <strong id="liveBp" class="m-digit">120/80</strong>
+                        </div>
+                    </div>
+
+                    <!-- Control Buttons -->
+                    <div class="live-actions-row">
+                        <button id="livePauseBtn" class="pill-btn secondary-btn">Pause</button>
+                        <button id="liveRecordBtn" class="pill-btn primary-btn">Record</button>
+                        <button id="liveMarkBtn" class="pill-btn secondary-btn">Mark Event</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 3: HISTORY -->
+            <section id="tabHistory" class="tab-pane">
+                <div class="section-header-row">
+                    <div>
+                        <h2 class="section-title">ECG History</h2>
+                        <span id="sessionCountText" class="section-sub">1 saved session</span>
+                    </div>
+                    <button id="clearHistoryBtn" class="icon-btn text-danger" title="Clear All Sessions">🗑️</button>
+                </div>
+
+                <div id="sessionList" class="session-list">
+                    <!-- Populated dynamically via JS -->
+                </div>
+
+                <!-- Session Detail Modal / View -->
+                <div id="sessionDetailModal" class="modal hidden">
+                    <div class="modal-card">
+                        <div class="modal-header">
+                            <div>
+                                <h3 id="modalSessionTitle" class="modal-title">Session Review</h3>
+                                <span id="modalSessionDate" class="modal-sub">23 Sept 2026</span>
+                            </div>
+                            <button id="closeModalBtn" class="modal-close">&times;</button>
+                        </div>
+
+                        <!-- Waveform Replay Canvas -->
+                        <div class="modal-canvas-box">
+                            <canvas id="ecgCanvasReview"></canvas>
+                        </div>
+
+                        <!-- Scrubbing & Zoom -->
+                        <div class="scrub-controls">
+                            <div class="scrub-row">
+                                <span>Scrub Trace:</span>
+                                <input type="range" id="scrubSlider" min="0" max="100" value="0">
+                                <span id="scrubTimeLabel">0.0s</span>
+                            </div>
+                        </div>
+
+                        <!-- Session Stats Table -->
+                        <div class="session-stats-grid">
+                            <div class="s-stat"><span>Duration:</span> <strong id="mDuration">05:42</strong></div>
+                            <div class="s-stat"><span>Lead:</span> <strong id="mLead">Lead II</strong></div>
+                            <div class="s-stat"><span>Avg HR:</span> <strong id="mAvgHr">76 BPM</strong></div>
+                            <div class="s-stat"><span>HR Range:</span> <strong id="mRangeHr">68 - 88 BPM</strong></div>
+                            <div class="s-stat"><span>Device:</span> <strong id="mDevice">CardioConnect Pro</strong></div>
+                            <div class="s-stat"><span>SpO₂:</span> <strong id="mSpo2">98%</strong></div>
+                        </div>
+
+                        <!-- Export Buttons -->
+                        <div class="modal-export-row">
+                            <button id="exportPdfBtn" class="pill-btn primary-btn">Export Clinical PDF</button>
+                            <button id="exportCsvBtn" class="pill-btn secondary-btn">Export Raw CSV</button>
+                        </div>
+
+                        <div class="modal-disclaimer">
+                            Notice: CardioConnect monitoring data is informational and not an automated clinical diagnosis.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Patient Profile Edit Modal -->
+                <div id="patientEditModal" class="modal hidden">
+                    <div class="modal-card">
+                        <div class="modal-header">
+                            <div>
+                                <h3 class="modal-title">Edit Patient Profile</h3>
+                                <span class="modal-sub">Update Clinical &amp; Demographic Telemetry Records</span>
+                            </div>
+                            <button id="closePatientModalBtn" class="modal-close">&times;</button>
+                        </div>
+
+                        <form id="patientEditForm" class="edit-form-grid" onsubmit="event.preventDefault();">
+                            <div class="form-row">
+                                <label>Full Name</label>
+                                <input type="text" id="inputPatName" class="styled-input" value="Rahul Sharma" required>
+                            </div>
+
+                            <div class="form-row-multi">
+                                <div>
+                                    <label>Patient ID</label>
+                                    <input type="text" id="inputPatId" class="styled-input" value="P-10245" required>
+                                </div>
+                                <div>
+                                    <label>Age</label>
+                                    <input type="number" id="inputPatAge" class="styled-input" value="52" required>
+                                </div>
+                                <div>
+                                    <label>Gender</label>
+                                    <select id="inputPatGender" class="styled-select" style="width: 100%; height: 38px;">
+                                        <option value="Male" selected>Male</option>
+                                        <option value="Female">Female</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-row-multi">
+                                <div>
+                                    <label>Date of Birth</label>
+                                    <input type="text" id="inputPatDob" class="styled-input" value="14 May 1974">
+                                </div>
+                                <div>
+                                    <label>Blood Group</label>
+                                    <input type="text" id="inputPatBlood" class="styled-input" value="B+">
+                                </div>
+                            </div>
+
+                            <div class="form-row-multi">
+                                <div>
+                                    <label>Height (cm)</label>
+                                    <input type="number" id="inputPatHeight" class="styled-input" value="175">
+                                </div>
+                                <div>
+                                    <label>Weight (kg)</label>
+                                    <input type="number" id="inputPatWeight" class="styled-input" value="78">
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <label>Attending Clinician</label>
+                                <input type="text" id="inputPatClinician" class="styled-input" value="Dr. Amit Verma (Cardiology)">
+                            </div>
+
+                            <div class="form-row">
+                                <label>Allergies</label>
+                                <input type="text" id="inputPatAllergies" class="styled-input" value="Penicillin (rash)">
+                            </div>
+
+                            <div class="form-row">
+                                <label>Current Medications</label>
+                                <textarea id="inputPatMeds" class="styled-textarea" rows="2">Ramipril 5mg OD, Atorvastatin 10mg HS</textarea>
+                            </div>
+
+                            <div class="form-row">
+                                <label>Existing Medical Notes</label>
+                                <textarea id="inputPatNotes" class="styled-textarea" rows="2">Mild hypertension managed with ACE inhibitors. No prior myocardial infarction.</textarea>
+                            </div>
+
+                            <div class="form-row">
+                                <label>Emergency Contact</label>
+                                <input type="text" id="inputPatEmergency" class="styled-input" value="Sunita Sharma (+91 98765 43211)">
+                            </div>
+
+                            <div class="modal-export-row" style="margin-top: 10px;">
+                                <button type="button" id="savePatientBtn" class="pill-btn primary-btn">Save Patient Records</button>
+                                <button type="button" id="cancelPatientBtn" class="pill-btn secondary-btn">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Diagnostic Explanation Modal -->
+                <div id="diagnosticExplanationModal" class="modal hidden">
+                    <div class="modal-card">
+                        <div class="modal-header">
+                            <div>
+                                <h3 id="diagTitle" class="modal-title">Possible Sinus Tachycardia</h3>
+                                <span id="diagMeasured" class="modal-sub" style="color: var(--phosphor-green); font-weight: bold;">Measured Value: 112 BPM</span>
+                            </div>
+                            <button id="closeDiagModalBtn" class="modal-close">&times;</button>
+                        </div>
+
+                        <div class="diag-body">
+                            <div class="diag-section">
+                                <span class="diag-label">WHAT IT MEANS</span>
+                                <p id="diagMeans" class="diag-text">The heart rate is faster than the expected resting reference range.</p>
+                            </div>
+
+                            <div class="diag-section">
+                                <span class="diag-label">IMPORTANT CLINICAL CONTEXT</span>
+                                <p id="diagContext" class="diag-text">This finding alone does not establish a diagnosis or cause. Heart rate can elevate due to physical exertion, psychological stress, fever, dehydration, caffeine, medications, or other underlying conditions.</p>
+                            </div>
+
+                            <div class="diag-section">
+                                <span class="diag-label">RECOMMENDED ACTION</span>
+                                <p id="diagAction" class="diag-text" style="color: var(--text-primary); font-weight: 500;">If the reading is persistent or accompanied by palpitations, lightheadedness, or shortness of breath, consult a qualified healthcare professional for assessment.</p>
+                            </div>
+                        </div>
+
+                        <div class="modal-export-row">
+                            <button id="ackDiagBtn" class="pill-btn primary-btn">Understood</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Educational ECG Conditions Reference Guide Modal -->
+                <div id="conditionsGuideModal" class="modal hidden">
+                    <div class="modal-card">
+                        <div class="modal-header">
+                            <div>
+                                <h3 class="modal-title">ECG Clinical Reference Guide</h3>
+                                <span class="modal-sub">Educational Overview of Common Patterns</span>
+                            </div>
+                            <button id="closeGuideModalBtn" class="modal-close">&times;</button>
+                        </div>
+
+                        <div class="guide-list">
+                            <div class="guide-item">
+                                <strong class="guide-name">Sinus Bradycardia</strong>
+                                <p class="guide-desc">Heart rate is below the algorithm's configured threshold (typically &lt;60 BPM) while the rhythm remains consistent with sinus rhythm pacing.</p>
+                            </div>
+                            <div class="guide-item">
+                                <strong class="guide-name">Sinus Tachycardia</strong>
+                                <p class="guide-desc">Heart rate is above the configured threshold (&gt;100 BPM) with a normal sinus rhythm pattern. Frequently physiological.</p>
+                            </div>
+                            <div class="guide-item">
+                                <strong class="guide-name">Atrial Fibrillation</strong>
+                                <p class="guide-desc">An irregular rhythm pattern with disorganized atrial depolarization and irregular ventricular response detected by a validated ECG algorithm.</p>
+                            </div>
+                            <div class="guide-item">
+                                <strong class="guide-name">Premature Beats (PAC / PVC)</strong>
+                                <p class="guide-desc">Early ectopic beats that disrupt the underlying cardiac cycle, followed by compensatory intervals.</p>
+                            </div>
+                            <div class="guide-item">
+                                <strong class="guide-name">Conduction Abnormalities</strong>
+                                <p class="guide-desc">Delays or blocks involving the PR interval (&gt;200 ms) or bundle branch conduction (QRS &gt;120 ms).</p>
+                            </div>
+                            <div class="guide-item">
+                                <strong class="guide-name">ST-Segment Abnormality</strong>
+                                <p class="guide-desc">Changes in ST segment elevation or depression that warrant immediate clinical evaluation.</p>
+                            </div>
+                            <div class="guide-item">
+                                <strong class="guide-name">QT/QTc Abnormality</strong>
+                                <p class="guide-desc">QTc outside configured reference limits (&gt;450 ms males, &gt;460 ms females), indicating prolonged ventricular repolarization.</p>
+                            </div>
+                        </div>
+
+                        <div class="modal-disclaimer">
+                            Important: Do not convert these findings into a confirmed disease diagnosis. CardioConnect is an informational telemetry system.
+                        </div>
+
+                        <div class="modal-export-row">
+                            <button id="ackGuideBtn" class="pill-btn primary-btn">Close Guide</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Add Patient Modal -->
+                <div id="addPatientModal" class="modal hidden">
+                    <div class="modal-card">
+                        <div class="modal-header">
+                            <div>
+                                <h3 class="modal-title">Add New Patient</h3>
+                                <span class="modal-sub">Register patient for clinical ECG monitoring</span>
+                            </div>
+                            <button id="closeAddPatientModalBtn" class="modal-close">&times;</button>
+                        </div>
+
+                        <div id="addPatientError" class="modal-alert-box hidden"></div>
+
+                        <form id="addPatientForm" class="edit-form-grid" onsubmit="event.preventDefault();">
+                            <div class="form-row-multi">
+                                <div>
+                                    <label>Patient ID *</label>
+                                    <input type="text" id="newPatId" class="styled-input" placeholder="e.g. P-10248" required>
+                                </div>
+                                <div style="flex: 1.5;">
+                                    <label>Full Name *</label>
+                                    <input type="text" id="newPatName" class="styled-input" placeholder="Full Name" required>
+                                </div>
+                            </div>
+
+                            <div class="form-row-multi">
+                                <div>
+                                    <label>Age (yrs) *</label>
+                                    <input type="number" id="newPatAge" class="styled-input" placeholder="e.g. 52" required>
+                                </div>
+                                <div>
+                                    <label>Gender *</label>
+                                    <select id="newPatGender" class="styled-select" style="width: 100%; height: 38px;">
+                                        <option value="Male" selected>Male</option>
+                                        <option value="Female">Female</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label>Date of Birth</label>
+                                    <input type="text" id="newPatDob" class="styled-input" placeholder="DD Mon YYYY">
+                                </div>
+                            </div>
+
+                            <div class="form-row-multi">
+                                <div>
+                                    <label>Height (cm)</label>
+                                    <input type="number" id="newPatHeight" class="styled-input" placeholder="175">
+                                </div>
+                                <div>
+                                    <label>Weight (kg)</label>
+                                    <input type="number" id="newPatWeight" class="styled-input" placeholder="78">
+                                </div>
+                                <div class="bmi-preview-box">
+                                    <span class="bmi-lbl">Calculated BMI</span>
+                                    <strong id="newPatBmi" class="bmi-val">—</strong>
+                                </div>
+                            </div>
+
+                            <div class="form-row-multi">
+                                <div>
+                                    <label>Blood Group</label>
+                                    <select id="newPatBlood" class="styled-select" style="width: 100%; height: 38px;">
+                                        <option value="A+">A+</option>
+                                        <option value="A-">A-</option>
+                                        <option value="B+" selected>B+</option>
+                                        <option value="B-">B-</option>
+                                        <option value="AB+">AB+</option>
+                                        <option value="AB-">AB-</option>
+                                        <option value="O+">O+</option>
+                                        <option value="O-">O-</option>
+                                    </select>
+                                </div>
+                                <div style="flex: 1.5;">
+                                    <label>Phone Number</label>
+                                    <input type="text" id="newPatPhone" class="styled-input" placeholder="+91 98765 00000">
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <label>Emergency Contact</label>
+                                <input type="text" id="newPatEmergency" class="styled-input" placeholder="Contact name & phone">
+                            </div>
+
+                            <div class="form-row">
+                                <label>Attending Clinician</label>
+                                <input type="text" id="newPatClinician" class="styled-input" value="Dr. Amit Verma (Cardiology)">
+                            </div>
+
+                            <div class="form-row">
+                                <label>Existing Medical Notes</label>
+                                <textarea id="newPatNotes" class="styled-textarea" rows="2" placeholder="Hypertension, CAD, stent, etc."></textarea>
+                            </div>
+
+                            <div class="form-row">
+                                <label>Current Medications</label>
+                                <textarea id="newPatMeds" class="styled-textarea" rows="2" placeholder="Medications, dosages..."></textarea>
+                            </div>
+
+                            <div class="form-row">
+                                <label>Allergies</label>
+                                <input type="text" id="newPatAllergies" class="styled-input" placeholder="Penicillin, Sulfa, etc.">
+                            </div>
+
+                            <div class="modal-export-row" style="margin-top: 10px;">
+                                <button type="button" id="saveNewPatientBtn" class="pill-btn primary-btn">+ Save &amp; Select</button>
+                                <button type="button" id="cancelAddPatientBtn" class="pill-btn secondary-btn">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Patient Profile Detail View Modal -->
+                <div id="patientProfileDetailModal" class="modal hidden">
+                    <div class="modal-card">
+                        <div class="modal-header">
+                            <div>
+                                <h3 id="profPatName" class="modal-title">Rahul Sharma</h3>
+                                <span id="profPatIdBadge" class="modal-sub">ID: P-10245 • 52y • Male</span>
+                            </div>
+                            <button id="closeProfileDetailModalBtn" class="modal-close">&times;</button>
+                        </div>
+
+                        <div class="profile-details-content">
+                            <!-- Quick Action Bar -->
+                            <div class="profile-action-bar">
+                                <button id="profSetMonitorBtn" class="pill-btn primary-btn" style="flex: 1;">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                                    <span id="profSetMonitorBtnText">Set as Active &amp; Monitor</span>
+                                </button>
+                                <button id="profEditBtn" class="pill-btn secondary-btn">Edit</button>
+                                <button id="profDeleteBtn" class="pill-btn danger-btn">Delete</button>
+                            </div>
+
+                            <!-- Metrics Grid -->
+                            <div class="profile-metrics-grid">
+                                <div class="p-card"><span class="p-lbl">Age / DOB</span><strong id="profAgeDob" class="p-val">52y (14 May 1974)</strong></div>
+                                <div class="p-card"><span class="p-lbl">Blood Group</span><strong id="profBlood" class="p-val">B+</strong></div>
+                                <div class="p-card"><span class="p-lbl">Height / Weight</span><strong id="profHeightWeight" class="p-val">175 cm / 78 kg</strong></div>
+                                <div class="p-card"><span class="p-lbl">Body Mass Index</span><strong id="profBmi" class="p-val">25.5 (Overweight)</strong></div>
+                            </div>
+
+                            <!-- Communication & Clinical -->
+                            <div class="profile-section-box">
+                                <div class="p-row"><span>Phone:</span> <strong id="profPhone">+91 98765 43210</strong></div>
+                                <div class="p-row"><span>Emergency:</span> <strong id="profEmergency">Sunita Sharma (+91 98765 43211)</strong></div>
+                                <div class="p-row"><span>Doctor:</span> <strong id="profClinician">Dr. Amit Verma</strong></div>
+                                <div class="p-row"><span>Allergies:</span> <strong id="profAllergies" class="text-danger">Penicillin (rash)</strong></div>
+                                <div class="p-row"><span>Medications:</span> <span id="profMeds">Ramipril 5mg OD, Atorvastatin 10mg HS</span></div>
+                                <div class="p-row"><span>Medical Notes:</span> <span id="profNotes">Mild hypertension managed with ACE inhibitors.</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recording Safety Guard Warning Modal -->
+                <div id="safetyGuardModal" class="modal hidden">
+                    <div class="modal-card safety-guard-card">
+                        <div class="modal-header">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="font-size: 22px;">⚠️</span>
+                                <div>
+                                    <h3 class="modal-title text-amber">ECG Recording In Progress</h3>
+                                    <span class="modal-sub">Patient Switching Safety Guard</span>
+                                </div>
+                            </div>
+                            <button id="closeSafetyGuardBtn" class="modal-close">&times;</button>
+                        </div>
+
+                        <div class="safety-guard-body">
+                            <p class="guard-msg">
+                                Patient <strong id="guardCurrentPatName">Rahul Sharma</strong> is currently being actively recorded.
+                            </p>
+                            <p class="guard-sub-msg">
+                                Switching to <strong id="guardTargetPatName">Priya Verma</strong> will immediately stop and save the current telemetry session to prevent mixing patient ECG waveforms.
+                            </p>
+                            <p class="guard-prompt">Do you want to continue?</p>
+                        </div>
+
+                        <div class="modal-export-row">
+                            <button id="cancelGuardBtn" class="pill-btn secondary-btn">Cancel</button>
+                            <button id="confirmStopAndSwitchBtn" class="pill-btn danger-btn">Stop &amp; Switch Patient</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 4: DEVICE (BLE) -->
+            <section id="tabDevice" class="tab-pane">
+                <div class="section-header-row">
+                    <div>
+                        <h2 class="section-title">Connect ECG Device</h2>
+                        <span class="section-sub">Bluetooth Low Energy (BLE) Telemetry</span>
+                    </div>
+                    <button id="openProtocolBtn" class="pill-btn secondary-btn">Protocol UUIDs</button>
+                </div>
+
+                <!-- Bluetooth Status Card -->
+                <div class="card bt-status-card">
+                    <div class="bt-status-left">
+                        <span class="bt-indicator-dot"></span>
+                        <div>
+                            <strong class="bt-label">Bluetooth Hardware Active</strong>
+                            <span class="bt-sub">Ready to pair with medical sensors</span>
+                        </div>
+                    </div>
+                    <button id="scanBleBtn" class="pill-btn primary-btn">
+                        <span id="scanBtnText">Scan for Devices</span>
+                    </button>
+                </div>
+
+                <!-- Connected Hardware Card -->
+                <div id="connectedDeviceBox" class="card connected-device-card hidden">
+                    <div class="conn-header">
+                        <div>
+                            <strong id="connDevName" class="conn-name">ECG-Monitor-01</strong>
+                            <span id="connDevAddr" class="conn-addr">CC:52:90:3A:41:F0</span>
+                        </div>
+                        <span class="connected-badge">CONNECTED</span>
+                    </div>
+                    <div class="conn-actions">
+                        <button id="disconnectBleBtn" class="pill-btn danger-btn">Disconnect</button>
+                        <button id="reconnectBleBtn" class="pill-btn secondary-btn">Reconnect</button>
+                    </div>
+                </div>
+
+                <!-- Discovered Devices List -->
+                <div class="device-section-title">DISCOVERED MEDICAL HARDWARE</div>
+                <div id="deviceList" class="device-list">
+                    <!-- Populated via JS -->
+                </div>
+            </section>
+
+            <!-- TAB 5: SETTINGS -->
+            <section id="tabSettings" class="tab-pane">
+                <div class="section-header-row">
+                    <div>
+                        <h2 class="section-title">System Settings</h2>
+                        <span class="section-sub">ECG Calibration &amp; Security</span>
+                    </div>
+                </div>
+
+                <!-- Demo Mode Toggle -->
+                <div class="card settings-card">
+                    <div class="setting-row">
+                        <div>
+                            <strong class="setting-title">Synthetic Demo Mode</strong>
+                            <p class="setting-desc">Simulate realistic cardiac P-Q-R-S-T telemetry without physical hardware</p>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="demoModeToggle" checked>
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Display & Grid Settings -->
+                <div class="card settings-card">
+                    <h3 class="settings-group-title">ECG DISPLAY &amp; CALIBRATION</h3>
+
+                    <div class="setting-row">
+                        <div>
+                            <strong class="setting-title">Medical Millimeter Grid</strong>
+                            <p class="setting-desc">Show standard 1mm minor and 5mm major lines</p>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="gridToggle" checked>
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+
+                    <div class="setting-row">
+                        <div>
+                            <strong class="setting-title">Trace Phosphor Color</strong>
+                            <p class="setting-desc">Clinical green, electric cyan, or amber</p>
+                        </div>
+                        <select id="colorSelect" class="styled-select">
+                            <option value="#00E676" selected>Phosphor Neon Green</option>
+                            <option value="#00E5FF">Electric Cyan</option>
+                            <option value="#FFD600">Hospital Amber</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Bluetooth Auto Reconnect -->
+                <div class="card settings-card">
+                    <h3 class="settings-group-title">DEVICE CONNECTIVITY</h3>
+                    <div class="setting-row">
+                        <div>
+                            <strong class="setting-title">Auto-Reconnect</strong>
+                            <p class="setting-desc">Automatically reconnect if BLE signal drops</p>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="autoReconnectToggle" checked>
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Legal & Medical Disclaimer -->
+                <div class="card settings-card">
+                    <h3 class="settings-group-title">MEDICAL SAFETY &amp; LEGAL</h3>
+                    <p class="legal-text">
+                        CardioConnect is a cardiac monitoring interface and data transmission tool. It does NOT diagnose medical conditions, arrhythmia syndromes, or myocardial infarction. Always seek immediate emergency medical care if you or a patient experiences acute cardiovascular symptoms.
+                    </p>
+                    <div class="app-version-tag">Version 1.0.0 (Build 2026) • Non-Diagnostic Prototype</div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Bottom Navigation Bar -->
+        <nav class="bottom-nav">
+            <button class="nav-item active" data-tab="tabDashboard">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+                <span>Dashboard</span>
+            </button>
+            <button class="nav-item" data-tab="tabPatients">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                <span>Patients</span>
+            </button>
+            <button class="nav-item" data-tab="tabLive">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                <span>Live ECG</span>
+            </button>
+            <button class="nav-item" data-tab="tabHistory">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                <span>History</span>
+            </button>
+            <button class="nav-item" data-tab="tabDevice">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6.5 6.5 17.5 17.5 12 23 12 1 17.5 6.5 6.5 17.5"/></svg>
+                <span>Device</span>
+            </button>
+            <button class="nav-item" data-tab="tabSettings">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                <span>Settings</span>
+            </button>
+        </nav>
+    </div>
+
+    <!-- External Script -->
+    <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+{
+  "name": "cardioconnect",
+  "version": "1.0.0",
+  "description": "CardioConnect - Hospital-Grade ECG & Multi-Parameter Telemetry Monitor",
+  "main": "server.js",
+  "scripts": {
+    "dev": "node server.js",
+    "start": "node server.js"
+  },
+  "keywords": [
+    "ecg",
+    "cardiology",
+    "telemetry",
+    "ble",
+    "medical-monitoring"
+  ],
+  "author": "CardioConnect Team",
+  "license": "UNLICENSED"
+}

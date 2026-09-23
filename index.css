@@ -1,0 +1,1721 @@
+:root {
+    --bg-dark: #070A0F;
+    --surface-dark: #0F1624;
+    --card-dark: #141E30;
+    --card-border: #1F2E47;
+    --phosphor-green: #00E676;
+    --electric-cyan: #00E5FF;
+    --medical-amber: #FFD600;
+    --emergency-red: #FF3D71;
+    --hospital-blue: #2979FF;
+    --text-primary: #FFFFFF;
+    --text-secondary: #8E9DB2;
+    --text-tertiary: #52637A;
+    --grid-major: #19273B;
+    --grid-minor: #0E1724;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+body {
+    background-color: #030508;
+    color: var(--text-primary);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-x: hidden;
+}
+
+/* App Viewport Frame */
+.app-viewport {
+    width: 100%;
+    max-width: 520px;
+    height: 100vh;
+    max-height: 940px;
+    background-color: var(--bg-dark);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    border: 1px solid #1A263A;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 100px rgba(0, 230, 118, 0.05);
+    overflow: hidden;
+}
+
+@media (min-width: 768px) {
+    .app-viewport {
+        border-radius: 28px;
+        height: 94vh;
+    }
+}
+
+/* Top App Bar */
+.top-bar {
+    height: 64px;
+    padding: 0 18px;
+    background: linear-gradient(180deg, #101826 0%, #0B111D 100%);
+    border-bottom: 1px solid var(--card-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 10;
+}
+
+.brand-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.heartbeat-dot {
+    width: 10px;
+    height: 10px;
+    background-color: var(--phosphor-green);
+    border-radius: 50%;
+    box-shadow: 0 0 12px var(--phosphor-green);
+    animation: heartPulse 1.2s infinite ease-in-out;
+}
+
+@keyframes heartPulse {
+    0% { transform: scale(0.9); opacity: 0.7; }
+    50% { transform: scale(1.3); opacity: 1; }
+    100% { transform: scale(0.9); opacity: 0.7; }
+}
+
+.brand-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.brand-title {
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    color: var(--text-primary);
+}
+
+.brand-sub {
+    font-size: 10px;
+    color: var(--phosphor-green);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.status-pill {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+}
+
+.status-pill.demo-mode {
+    background: rgba(255, 214, 0, 0.12);
+    border: 1px solid rgba(255, 214, 0, 0.35);
+    color: var(--medical-amber);
+}
+
+.status-pill.connected {
+    background: rgba(0, 230, 118, 0.12);
+    border: 1px solid rgba(0, 230, 118, 0.35);
+    color: var(--phosphor-green);
+}
+
+.status-indicator {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: currentColor;
+}
+
+.icon-btn {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--card-border);
+    color: var(--text-primary);
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.icon-btn:hover {
+    background: rgba(255, 255, 255, 0.12);
+}
+
+/* Alert Notification Banner */
+.alert-container {
+    padding: 0 16px;
+    margin-top: 8px;
+}
+
+.alert-banner {
+    padding: 10px 14px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+    border: 1px solid transparent;
+}
+
+.alert-banner.warning {
+    background: rgba(255, 214, 0, 0.12);
+    border-color: rgba(255, 214, 0, 0.35);
+    color: var(--medical-amber);
+}
+
+.alert-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.alert-content strong {
+    font-size: 12px;
+}
+
+.alert-content span {
+    font-size: 11px;
+    color: var(--text-secondary);
+}
+
+.alert-close {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 18px;
+    cursor: pointer;
+}
+
+/* Main Scrollable Content */
+.main-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 14px 16px 80px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.tab-pane {
+    display: none;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.tab-pane.active {
+    display: flex;
+}
+
+/* Cards */
+.card {
+    background: var(--card-dark);
+    border: 1px solid var(--card-border);
+    border-radius: 18px;
+    padding: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+}
+
+/* ECG Canvas Monitor Card */
+.ecg-monitor-card {
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.ecg-monitor-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 4px;
+}
+
+.lead-info {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.lead-badge {
+    background: rgba(0, 230, 118, 0.15);
+    color: var(--phosphor-green);
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 6px;
+    border: 1px solid rgba(0, 230, 118, 0.3);
+}
+
+.filter-badge, .calib-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text-tertiary);
+}
+
+.canvas-wrapper {
+    width: 100%;
+    height: 220px;
+    background: #04070B;
+    border-radius: 12px;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid #162234;
+}
+
+canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.caliper-tag {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: #4A5D73;
+    pointer-events: none;
+}
+
+/* Session Recording Ribbon */
+.recording-ribbon {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+}
+
+.recording-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.rec-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: var(--emergency-red);
+    box-shadow: 0 0 10px var(--emergency-red);
+    animation: blinkRec 1s infinite alternate;
+}
+
+@keyframes blinkRec {
+    from { opacity: 0.3; }
+    to { opacity: 1; }
+}
+
+.rec-labels {
+    display: flex;
+    flex-direction: column;
+}
+
+.rec-title {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.rec-timer {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-tertiary);
+}
+
+.recording-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.pill-btn {
+    border: none;
+    border-radius: 10px;
+    padding: 7px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s;
+}
+
+.primary-btn {
+    background: var(--phosphor-green);
+    color: #000;
+}
+
+.primary-btn:hover {
+    background: #00c864;
+    transform: translateY(-1px);
+}
+
+.secondary-btn {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text-primary);
+    border: 1px solid var(--card-border);
+}
+
+.secondary-btn:hover {
+    background: rgba(255, 255, 255, 0.14);
+}
+
+.danger-btn {
+    background: rgba(255, 61, 113, 0.15);
+    color: var(--emergency-red);
+    border: 1px solid rgba(255, 61, 113, 0.4);
+}
+
+/* Heart Rate Primary Card */
+.hr-primary-card {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.card-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-title-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.card-title {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    color: var(--text-secondary);
+}
+
+.heart-pulse-svg {
+    animation: heartPulse 1.1s infinite ease-in-out;
+}
+
+.signal-chip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 8px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.signal-chip.good {
+    background: rgba(0, 230, 118, 0.12);
+    border: 1px solid rgba(0, 230, 118, 0.3);
+    color: var(--phosphor-green);
+}
+
+.signal-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: currentColor;
+}
+
+.hr-main-display {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+}
+
+.hr-digits {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 52px;
+    font-weight: 700;
+    color: var(--phosphor-green);
+    line-height: 1;
+}
+
+.hr-unit {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    font-weight: 600;
+    color: rgba(0, 230, 118, 0.8);
+}
+
+.hr-stats-row {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.stat-col {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.stat-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-tertiary);
+}
+
+.stat-val {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+/* Validated Rhythm Card */
+.rhythm-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: rgba(15, 22, 36, 0.8);
+}
+
+.rhythm-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--phosphor-green);
+    box-shadow: 0 0 8px var(--phosphor-green);
+}
+
+.rhythm-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.rhythm-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-tertiary);
+    letter-spacing: 0.6px;
+}
+
+.rhythm-val {
+    font-size: 12.5px;
+    color: var(--text-primary);
+}
+
+/* Vitals Grid (SpO2, BP, Temp, Battery) */
+.vitals-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.vital-card {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 12px 14px;
+}
+
+.vital-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.vital-name {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-secondary);
+}
+
+.vital-value-row {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+}
+
+.vital-digit {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.vital-unit {
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.vital-unit.cyan { color: var(--electric-cyan); }
+.vital-unit.blue { color: var(--hospital-blue); }
+.vital-unit.amber { color: var(--medical-amber); }
+.vital-unit.green { color: var(--phosphor-green); }
+
+.vital-note {
+    font-size: 10.5px;
+    color: var(--text-tertiary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Notice Card */
+.notice-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px 14px;
+    background: rgba(255, 214, 0, 0.04);
+    border-color: rgba(255, 214, 0, 0.2);
+}
+
+.notice-icon {
+    font-size: 14px;
+    margin-top: 1px;
+}
+
+.notice-text {
+    font-size: 11px;
+    color: var(--text-secondary);
+    line-height: 15px;
+}
+
+/* Live ECG Screen */
+.live-full-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    height: 100%;
+}
+
+.live-top-ribbon {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.live-lead-controls {
+    display: flex;
+    gap: 6px;
+}
+
+.styled-select {
+    background: var(--card-dark);
+    border: 1px solid var(--card-border);
+    color: var(--text-primary);
+    padding: 5px 8px;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 600;
+    outline: none;
+}
+
+.live-canvas-box {
+    flex: 1;
+    min-height: 280px;
+    background: #030508;
+    border-radius: 16px;
+    border: 1px solid var(--card-border);
+    position: relative;
+    overflow: hidden;
+}
+
+.live-caliper {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: #435467;
+}
+
+.live-bottom-bar {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+}
+
+.live-metric-card {
+    background: var(--card-dark);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 8px 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.m-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-tertiary);
+}
+
+.m-val-row {
+    display: flex;
+    align-items: baseline;
+    gap: 2px;
+}
+
+.m-digit {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 18px;
+    color: var(--phosphor-green);
+}
+
+.m-unit {
+    font-size: 10px;
+    color: var(--text-secondary);
+}
+
+.live-actions-row {
+    display: flex;
+    gap: 8px;
+}
+
+.live-actions-row button {
+    flex: 1;
+    justify-content: center;
+    padding: 10px;
+}
+
+/* History Screen */
+.section-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.section-title {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.section-sub {
+    font-size: 11.5px;
+    color: var(--text-tertiary);
+}
+
+.session-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.session-item-card {
+    background: var(--card-dark);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    cursor: pointer;
+    transition: transform 0.15s, border-color 0.15s;
+}
+
+.session-item-card:hover {
+    border-color: var(--phosphor-green);
+    transform: translateY(-1px);
+}
+
+.s-item-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.s-date {
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.s-meta {
+    font-size: 11px;
+    color: var(--text-tertiary);
+}
+
+.s-duration {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--phosphor-green);
+    font-weight: 700;
+}
+
+.s-stats-inline {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+}
+
+/* Modal View */
+.modal {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    z-index: 100;
+}
+
+.modal.hidden {
+    display: none;
+}
+
+.modal-card {
+    background: var(--surface-dark);
+    border: 1px solid var(--card-border);
+    border-radius: 20px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-title {
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.modal-sub {
+    font-size: 11px;
+    color: var(--text-tertiary);
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.modal-canvas-box {
+    width: 100%;
+    height: 180px;
+    background: #030609;
+    border-radius: 12px;
+    border: 1px solid var(--card-border);
+}
+
+.scrub-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.scrub-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+}
+
+.scrub-row input {
+    flex: 1;
+}
+
+.session-stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    background: var(--card-dark);
+    border-radius: 12px;
+    padding: 10px;
+    font-size: 11.5px;
+}
+
+.modal-export-row {
+    display: flex;
+    gap: 10px;
+}
+
+.modal-export-row button {
+    flex: 1;
+    justify-content: center;
+    padding: 10px;
+}
+
+.modal-disclaimer {
+    font-size: 10px;
+    color: var(--text-tertiary);
+    text-align: center;
+}
+
+/* Device Screen */
+.bt-status-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.bt-status-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.bt-indicator-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: var(--phosphor-green);
+    box-shadow: 0 0 10px var(--phosphor-green);
+}
+
+.bt-label {
+    font-size: 13.5px;
+    font-weight: 700;
+}
+
+.bt-sub {
+    font-size: 11px;
+    color: var(--text-tertiary);
+    display: block;
+}
+
+.device-section-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-tertiary);
+    letter-spacing: 0.8px;
+    margin-top: 6px;
+}
+
+.device-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.device-card {
+    background: var(--card-dark);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: 12px 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.dev-name {
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.dev-addr {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    color: var(--text-tertiary);
+    display: block;
+}
+
+.dev-rssi {
+    font-size: 11px;
+    color: var(--text-secondary);
+}
+
+/* Settings Screen */
+.settings-card {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.settings-group-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-tertiary);
+    letter-spacing: 0.8px;
+}
+
+.setting-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
+
+.setting-title {
+    font-size: 13.5px;
+    font-weight: 600;
+}
+
+.setting-desc {
+    font-size: 11px;
+    color: var(--text-tertiary);
+    margin-top: 2px;
+}
+
+.legal-text {
+    font-size: 11px;
+    color: var(--text-secondary);
+    line-height: 16px;
+}
+
+.app-version-tag {
+    font-size: 10.5px;
+    color: var(--text-tertiary);
+    text-align: center;
+    margin-top: 6px;
+}
+
+/* Switch UI */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 24px;
+    flex-shrink: 0;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    inset: 0;
+    background-color: #24334A;
+    transition: .3s;
+    border-radius: 24px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .3s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: var(--phosphor-green);
+}
+
+input:checked + .slider:before {
+    transform: translateX(20px);
+}
+
+/* Bottom Navigation Bar */
+.bottom-nav {
+    height: 68px;
+    background: #0B111D;
+    border-top: 1px solid var(--card-border);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+}
+
+.nav-item {
+    background: none;
+    border: none;
+    color: var(--text-tertiary);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    font-size: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: color 0.2s;
+    padding: 6px 12px;
+}
+
+.nav-item:hover, .nav-item.active {
+    color: var(--phosphor-green);
+}
+
+.hidden {
+    display: none !important;
+}
+
+.text-danger { color: var(--emergency-red); }
+.text-green { color: var(--phosphor-green); }
+
+/* Patient Profile Card */
+.patient-profile-card {
+    padding: 12px 14px;
+    background: linear-gradient(135deg, #121A28 0%, #0F1724 100%);
+}
+
+.patient-main-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.patient-avatar-box {
+    width: 40px;
+    height: 40px;
+    background: rgba(0, 230, 118, 0.12);
+    border: 1px solid rgba(0, 230, 118, 0.3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+.patient-details-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.patient-name-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.pat-name {
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.pat-badge {
+    background: rgba(255, 255, 255, 0.08);
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: var(--text-secondary);
+}
+
+.patient-sub-row {
+    font-size: 11px;
+    color: var(--text-tertiary);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.pat-id {
+    color: var(--electric-cyan);
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 600;
+}
+
+.pat-blood {
+    color: var(--phosphor-green);
+    font-weight: 600;
+}
+
+.pat-sep {
+    color: var(--card-border);
+}
+
+.edit-pat-btn {
+    width: 30px;
+    height: 30px;
+}
+
+/* ECG Interpretation Card */
+.interpretation-card {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.interp-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.interp-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    letter-spacing: 0.8px;
+}
+
+.risk-chip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 8px;
+    border-radius: 16px;
+    font-size: 10.5px;
+    font-weight: 700;
+}
+
+.risk-chip.normal {
+    background: rgba(0, 230, 118, 0.12);
+    border: 1px solid rgba(0, 230, 118, 0.35);
+    color: var(--phosphor-green);
+}
+
+.risk-chip.attention {
+    background: rgba(255, 214, 0, 0.12);
+    border: 1px solid rgba(255, 214, 0, 0.35);
+    color: var(--medical-amber);
+}
+
+.risk-chip.urgent {
+    background: rgba(255, 61, 113, 0.15);
+    border: 1px solid rgba(255, 61, 113, 0.4);
+    color: var(--emergency-red);
+}
+
+.risk-chip.unable {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--text-tertiary);
+}
+
+.interp-rhythm-box {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--card-border);
+    padding: 10px 12px;
+    border-radius: 10px;
+}
+
+.interp-sublabel {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-tertiary);
+    letter-spacing: 0.6px;
+}
+
+.interp-rhythm-name {
+    font-size: 16px;
+    color: var(--text-primary);
+}
+
+.interp-algo-tag {
+    font-size: 10.5px;
+    color: var(--text-tertiary);
+}
+
+.findings-section {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.findings-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.finding-item {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 8px;
+    padding: 8px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.finding-item:hover {
+    background: rgba(0, 230, 118, 0.08);
+    border-color: rgba(0, 230, 118, 0.25);
+}
+
+.f-title {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.f-meas {
+    font-size: 11px;
+    color: var(--text-secondary);
+}
+
+/* Measurements Card */
+.measurements-card {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.measurements-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.intervals-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+    padding: 10px;
+}
+
+.interval-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.i-label {
+    font-size: 10px;
+    color: var(--text-tertiary);
+    font-weight: 600;
+}
+
+.i-val {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13.5px;
+    color: var(--phosphor-green);
+    font-weight: 700;
+}
+
+.morphology-strip {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 11px;
+    padding-top: 4px;
+}
+
+.m-row {
+    display: flex;
+    justify-content: space-between;
+    color: var(--text-secondary);
+}
+
+.m-row strong {
+    color: var(--text-primary);
+}
+
+/* Forms & Dialog Details */
+.edit-form-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.form-row {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.form-row label, .form-row-multi label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-tertiary);
+}
+
+.form-row-multi {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.styled-input, .styled-textarea {
+    background: #080D16;
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    color: var(--text-primary);
+    padding: 8px 10px;
+    font-size: 12.5px;
+    outline: none;
+}
+
+.styled-input:focus, .styled-textarea:focus {
+    border-color: var(--phosphor-green);
+}
+
+.diag-body {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.diag-section {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.diag-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-tertiary);
+    letter-spacing: 0.8px;
+}
+
+.diag-text {
+    font-size: 12.5px;
+    color: var(--text-secondary);
+    line-height: 17px;
+}
+
+.guide-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 50vh;
+    overflow-y: auto;
+}
+
+.guide-item {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    padding: 10px 12px;
+}
+
+.guide-name {
+    font-size: 13.5px;
+    color: var(--phosphor-green);
+    display: block;
+    margin-bottom: 2px;
+}
+
+.guide-desc {
+    font-size: 11.5px;
+    color: var(--text-secondary);
+    line-height: 16px;
+}
+
+/* Multi-Patient Directory Styles */
+.search-bar-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--card-dark);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 0 14px;
+    margin-bottom: 14px;
+}
+
+.search-bar-wrap svg {
+    color: var(--text-tertiary);
+    flex-shrink: 0;
+}
+
+.search-input {
+    border: none !important;
+    background: transparent !important;
+    padding: 10px 0 !important;
+    font-size: 13px !important;
+    width: 100%;
+}
+
+.search-input:focus {
+    box-shadow: none !important;
+}
+
+.patients-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding-bottom: 24px;
+}
+
+.patient-dir-card {
+    background: var(--card-dark);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transition: border-color 0.2s, transform 0.15s;
+}
+
+.patient-dir-card:hover {
+    border-color: rgba(0, 230, 118, 0.3);
+}
+
+.patient-dir-card.active {
+    border-color: var(--phosphor-green);
+    box-shadow: 0 0 16px rgba(0, 230, 118, 0.08);
+}
+
+.pat-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.pat-identity {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.pat-initials-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 15px;
+    flex-shrink: 0;
+}
+
+.patient-dir-card.active .pat-initials-avatar {
+    background: rgba(0, 230, 118, 0.15);
+    color: var(--phosphor-green);
+    border: 1px solid rgba(0, 230, 118, 0.3);
+}
+
+.pat-info-col {
+    display: flex;
+    flex-direction: column;
+}
+
+.pat-title-line {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.pat-name-text {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.pat-check-icon {
+    color: var(--phosphor-green);
+    font-size: 13px;
+}
+
+.pat-sub-line {
+    font-size: 11.5px;
+    color: var(--text-tertiary);
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.pat-status-pill {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 10px;
+    text-transform: uppercase;
+}
+
+.pat-status-pill.active {
+    background: rgba(0, 230, 118, 0.15);
+    color: var(--phosphor-green);
+    border: 1px solid rgba(0, 230, 118, 0.3);
+}
+
+.pat-status-pill.idle {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-tertiary);
+    border: 1px solid var(--card-border);
+}
+
+.pat-meta-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-size: 11px;
+    color: var(--text-secondary);
+}
+
+.pat-actions-row {
+    display: flex;
+    gap: 8px;
+}
+
+.pat-actions-row .pill-btn {
+    flex: 1;
+    justify-content: center;
+    padding: 7px 12px;
+    font-size: 12px;
+}
+
+/* BMI Preview Box */
+.bmi-preview-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 8px;
+    padding: 6px 10px;
+    height: 38px;
+    margin-top: 19px;
+}
+
+.bmi-lbl {
+    font-size: 9px;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+}
+
+.bmi-val {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--phosphor-green);
+}
+
+/* Patient Profile Detail Modal */
+.profile-details-content {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    max-height: 65vh;
+    overflow-y: auto;
+}
+
+.profile-action-bar {
+    display: flex;
+    gap: 8px;
+}
+
+.profile-metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+}
+
+.p-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.p-lbl {
+    font-size: 10px;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+}
+
+.p-val {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.profile-section-box {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.p-row {
+    font-size: 12px;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    line-height: 17px;
+}
+
+.p-row span:first-child {
+    color: var(--text-tertiary);
+    min-width: 90px;
+}
+
+.p-row strong, .p-row span:last-child {
+    color: var(--text-primary);
+}
+
+/* Safety Guard Modal */
+.safety-guard-card {
+    border-color: rgba(255, 214, 0, 0.5) !important;
+}
+
+.safety-guard-body {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px 0;
+    line-height: 18px;
+}
+
+.guard-msg {
+    font-size: 14px;
+    color: var(--text-primary);
+}
+
+.guard-sub-msg {
+    font-size: 12.5px;
+    color: var(--text-secondary);
+}
+
+.guard-prompt {
+    font-size: 13px;
+    color: var(--medical-amber);
+    font-weight: 600;
+}
+
+.modal-alert-box {
+    background: rgba(255, 61, 113, 0.15);
+    border: 1px solid rgba(255, 61, 113, 0.4);
+    color: var(--emergency-red);
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    margin-bottom: 10px;
+}

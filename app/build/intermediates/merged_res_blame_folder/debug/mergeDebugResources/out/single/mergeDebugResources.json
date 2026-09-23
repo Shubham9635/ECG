@@ -1,0 +1,114 @@
+[
+    {
+        "merged": "/Users/shubhamgupta/.gradle/daemon/9.3.1/com.cardioconnect.app-debug-51:/mipmap-xhdpi_ic_launcher.webp.flat",
+        "source": "/Users/shubhamgupta/.gradle/daemon/9.3.1/com.cardioconnect.app-main-53:/mipmap-xhdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "/Users/shubhamgupta/.gradle/daemon/9.3.1/com.cardioconnect.app-debug-51:/mipmap-xxhdpi_ic_launcher_round.webp.flat",
+        "source": "/Users/shubhamgupta/.gradle/daemon/9.3.1/com.cardioconnect.app-main-53:/mipmap-xxhdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.cardioconnect.app-debug-51:/drawable_coderbyte.png.flat",
+        "source": "com.cardioconnect.app-main-53:/drawable/coderbyte.png"
+    },
+    {
+        "merged": "com.cardioconnect.app-debug-51:/drawable_atcoder.png.flat",
+        "source": "com.cardioconnect.app-main-53:/drawable/atcoder.png"
+    },
+    {
+        "merged": "/Users/shubhamgupta/.gradle/daemon/9.3.1/com.cardioconnect.app-debug-51:/mipmap-mdpi_ic_launcher_round.webp.flat",
+        "source": "/Users/shubhamgupta/.gradle/daemon/9.3.1/com.cardioconnect.app-main-53:/mipmap-mdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "/Users/shubhamgupta/.gradle/daemon/9.3.1/com.cardioconnect.app-debug-51:/mipmap-xxxhdpi_ic_launcher_round.webp.flat",
+        "source": "/Users/shubhamgupta/.gradle/daemon/9.3.1/com.cardioconnect.app-main-53:/mipmap-xxxhdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.cardioconnect.app-debug-51:/drawable_codewars.png.flat",
+        "source": "com.cardioconnect.app-main-53:/drawable/codewars.png"
+    },
+    {
+        "merged": "/Users/shubhamgupta/.gradle/daemon/9.3.1/com.cardioconnect.app-debug-51:/mipmap-hdpi_ic_launcher_round.webp.flat",
+        "source": "/Users/shubhamgupta/.gradle/daemon/9.3.1/com.cardioconnect.app-main-53:/mipmap-hdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.cardioconnect.app-debug-51:/drawable_hackerrank.png.flat",
+        "source": "com.cardioconnect.app-main-53:/drawable/hackerrank.png"
+    },
+    {
+        "merged": "/Users/shubhamgupta/.gradle/daemon/9.3.1/com.cardioconnect.app-debug-51:/mipmap-xhdpi_ic_launcher_round.webp.flat",
+        "source": "/Users/shubhamgupta/.gradle/daemon/9.3.1/com.cardioconnect.app-main-53:/mipmap-xhdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.cardioconnect.app-debug-51:/drawable_ic_launcher_background.xml.flat",
+        "source": "com.cardioconnect.app-main-53:/drawable/ic_launcher_background.xml"
+    },
+    {
+        "merged": "com.cardioconnect.app-debug-51:/drawable_ic_launcher_foreground.xml.flat",
+        "source": "com.cardioconnect.app-main-53:/drawable/ic_launcher_foreground.xml"
+    },
+    {
+        "merged": "com.cardioconnect.app-debug-51:/drawable_leetcode.png.flat",
+        "source": "com.cardioconnect.app-main-53:/drawable/leetcode.png"
+    },
+    {
+        "merged": "com.cardioconnect.app-debug-51:/drawable_topcoder.png.flat",
+        "source": "com.cardioconnect.app-main-53:/drawable/topcoder.png"
+    },
+    {
+        "merged": "com.cardioconnect.app-debug-51:/drawable_hackerearth.png.flat",
+        "source": "com.cardioconnect.app-main-53:/drawable/hackerearth.png"
+    },
+    {
+        "merged": "/Users/shubhamgupta/.gradle/daemon/9.3.1/com.cardioconnect.app-debug-51:/mipmap-hdpi_ic_launcher.webp.flat",
+        "source": "/Users/shubhamgupta/.gradle/daemon/9.3.1/com.cardioconnect.app-main-53:/mipmap-hdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.cardioconnect.app-debug-51:/drawable_projecteuler.png.flat",
+        "source": "com.cardioconnect.app-main-53:/drawable/projecteuler.png"
+    },
+    {
+        "merged": "com.cardioconnect.app-debug-51:/drawable_google_logo.png.flat",
+        "source": "com.cardioconnect.app-main-53:/drawable/google_logo.png"
+    },
+    {
+        "merged": "/Users/shubhamgupta/.gradle/daemon/9.3.1/com.cardioconnect.app-debug-51:/mipmap-anydpi_ic_launcher_round.xml.flat",
+        "source": "/Users/shubhamgupta/.gradle/daemon/9.3.1/com.cardioconnect.app-main-53:/mipmap-anydpi/ic_launcher_round.xml"
+    },
+    {
+        "merged": "com.cardioconnect.app-debug-51:/drawable_codeforces.png.flat",
+        "source": "com.cardioconnect.app-main-53:/drawable/codeforces.png"
+    },
+    {
+        "merged": "/Users/shubhamgupta/.gradle/daemon/9.3.1/com.cardioconnect.app-debug-51:/mipmap-mdpi_ic_launcher.webp.flat",
+        "source": "/Users/shubhamgupta/.gradle/daemon/9.3.1/com.cardioconnect.app-main-53:/mipmap-mdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "/Users/shubhamgupta/.gradle/daemon/9.3.1/com.cardioconnect.app-debug-51:/mipmap-xxhdpi_ic_launcher.webp.flat",
+        "source": "/Users/shubhamgupta/.gradle/daemon/9.3.1/com.cardioconnect.app-main-53:/mipmap-xxhdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "/Users/shubhamgupta/.gradle/daemon/9.3.1/com.cardioconnect.app-debug-51:/xml_file_paths.xml.flat",
+        "source": "/Users/shubhamgupta/.gradle/daemon/9.3.1/com.cardioconnect.app-main-53:/xml/file_paths.xml"
+    },
+    {
+        "merged": "com.cardioconnect.app-debug-51:/drawable_codechef.png.flat",
+        "source": "com.cardioconnect.app-main-53:/drawable/codechef.png"
+    },
+    {
+        "merged": "com.cardioconnect.app-debug-51:/drawable_codingblocks.jpeg.flat",
+        "source": "com.cardioconnect.app-main-53:/drawable/codingblocks.jpeg"
+    },
+    {
+        "merged": "/Users/shubhamgupta/.gradle/daemon/9.3.1/com.cardioconnect.app-debug-51:/mipmap-anydpi_ic_launcher.xml.flat",
+        "source": "/Users/shubhamgupta/.gradle/daemon/9.3.1/com.cardioconnect.app-main-53:/mipmap-anydpi/ic_launcher.xml"
+    },
+    {
+        "merged": "/Users/shubhamgupta/.gradle/daemon/9.3.1/com.cardioconnect.app-debug-51:/mipmap-xxxhdpi_ic_launcher.webp.flat",
+        "source": "/Users/shubhamgupta/.gradle/daemon/9.3.1/com.cardioconnect.app-main-53:/mipmap-xxxhdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.cardioconnect.app-debug-51:/drawable_gfg.png.flat",
+        "source": "com.cardioconnect.app-main-53:/drawable/gfg.png"
+    }
+]

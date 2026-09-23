@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">CardioConnect</string>
+    <string name="app_subtitle">Hospital-Grade ECG &amp; Multi-Parameter Monitor</string>
+    <string name="medical_disclaimer_full">DISCLAIMER: CardioConnect is a monitoring interface and research tool. It does not provide medical diagnosis, treatment recommendations, or clinical interpretations. In case of a cardiac emergency or severe symptoms, seek immediate emergency medical attention.</string>
+    <string name="medical_disclaimer_short">Prototype ECG Monitoring Application. For informational use only. Not for clinical diagnosis.</string>
+    <style name="Theme.CardioConnect" parent="android:Theme.Material.NoActionBar">
+        <item name="android:statusBarColor">#0A0E17</item>
+        <item name="android:navigationBarColor">#0A0E17</item>
+        <item name="android:windowBackground">#0A0E17</item>
+    </style>
+</resources>
