@@ -407,8 +407,161 @@
                 <div id="sessionList" class="session-list">
                     <!-- Populated dynamically via JS -->
                 </div>
+            </section>
 
-                <!-- Session Detail Modal / View -->
+            <!-- TAB 4: DEVICE (BLE) -->
+            <section id="tabDevice" class="tab-pane">
+                <div class="section-header-row">
+                    <div>
+                        <h2 class="section-title">Connect ECG Device</h2>
+                        <span class="section-sub">Bluetooth Low Energy (BLE) Telemetry</span>
+                    </div>
+                    <button id="openProtocolBtn" class="pill-btn secondary-btn">Protocol UUIDs</button>
+                </div>
+
+                <!-- Bluetooth Status Card -->
+                <div class="card bt-status-card">
+                    <div class="bt-status-left">
+                        <span class="bt-indicator-dot"></span>
+                        <div>
+                            <strong class="bt-label">Bluetooth Hardware Active</strong>
+                            <span class="bt-sub">Ready to pair with medical sensors</span>
+                        </div>
+                    </div>
+                    <button id="scanBleBtn" class="pill-btn primary-btn">
+                        <span id="scanBtnText">Scan for Devices</span>
+                    </button>
+                </div>
+
+                <!-- Connected Hardware Card -->
+                <div id="connectedDeviceBox" class="card connected-device-card hidden">
+                    <div class="conn-header">
+                        <div>
+                            <strong id="connDevName" class="conn-name">ECG-Monitor-01</strong>
+                            <span id="connDevAddr" class="conn-addr">CC:52:90:3A:41:F0</span>
+                        </div>
+                        <span class="connected-badge">CONNECTED</span>
+                    </div>
+                    <div class="conn-actions">
+                        <button id="disconnectBleBtn" class="pill-btn danger-btn">Disconnect</button>
+                        <button id="reconnectBleBtn" class="pill-btn secondary-btn">Reconnect</button>
+                    </div>
+                </div>
+
+                <!-- Discovered Devices List -->
+                <div class="device-section-title">DISCOVERED MEDICAL HARDWARE</div>
+                <div id="deviceList" class="device-list">
+                    <!-- Populated via JS -->
+                </div>
+            </section>
+
+            <!-- TAB 5: SETTINGS -->
+            <section id="tabSettings" class="tab-pane">
+                <div class="section-header-row">
+                    <div>
+                        <h2 class="section-title">System Settings</h2>
+                        <span class="section-sub">ECG Calibration &amp; Security</span>
+                    </div>
+                </div>
+
+                <!-- Demo Mode Toggle -->
+                <div class="card settings-card">
+                    <div class="setting-row">
+                        <div>
+                            <strong class="setting-title">Synthetic Demo Mode</strong>
+                            <p class="setting-desc">Simulate realistic cardiac P-Q-R-S-T telemetry without physical hardware</p>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="demoModeToggle" checked>
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Display & Grid Settings -->
+                <div class="card settings-card">
+                    <h3 class="settings-group-title">ECG DISPLAY &amp; CALIBRATION</h3>
+
+                    <div class="setting-row">
+                        <div>
+                            <strong class="setting-title">Medical Millimeter Grid</strong>
+                            <p class="setting-desc">Show standard 1mm minor and 5mm major lines</p>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="gridToggle" checked>
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+
+                    <div class="setting-row">
+                        <div>
+                            <strong class="setting-title">Trace Phosphor Color</strong>
+                            <p class="setting-desc">Clinical green, electric cyan, or amber</p>
+                        </div>
+                        <select id="colorSelect" class="styled-select">
+                            <option value="#00E676" selected>Phosphor Neon Green</option>
+                            <option value="#00E5FF">Electric Cyan</option>
+                            <option value="#FFD600">Hospital Amber</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Bluetooth Auto Reconnect -->
+                <div class="card settings-card">
+                    <h3 class="settings-group-title">DEVICE CONNECTIVITY</h3>
+                    <div class="setting-row">
+                        <div>
+                            <strong class="setting-title">Auto-Reconnect</strong>
+                            <p class="setting-desc">Automatically reconnect if BLE signal drops</p>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="autoReconnectToggle" checked>
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Legal & Medical Disclaimer -->
+                <div class="card settings-card">
+                    <h3 class="settings-group-title">MEDICAL SAFETY &amp; LEGAL</h3>
+                    <p class="legal-text">
+                        CardioConnect is a cardiac monitoring interface and data transmission tool. It does NOT diagnose medical conditions, arrhythmia syndromes, or myocardial infarction. Always seek immediate emergency medical care if you or a patient experiences acute cardiovascular symptoms.
+                    </p>
+                    <div class="app-version-tag">Version 1.0.0 (Build 2026) • Non-Diagnostic Prototype</div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Bottom Navigation Bar -->
+        <nav class="bottom-nav">
+            <button class="nav-item active" data-tab="tabDashboard">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+                <span>Dashboard</span>
+            </button>
+            <button class="nav-item" data-tab="tabPatients">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                <span>Patients</span>
+            </button>
+            <button class="nav-item" data-tab="tabLive">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                <span>Live ECG</span>
+            </button>
+            <button class="nav-item" data-tab="tabHistory">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                <span>History</span>
+            </button>
+            <button class="nav-item" data-tab="tabDevice">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6.5 6.5 17.5 17.5 12 23 12 1 17.5 6.5 6.5 17.5"/></svg>
+                <span>Device</span>
+            </button>
+            <button class="nav-item" data-tab="tabSettings">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                <span>Settings</span>
+            </button>
+        </nav>
+
+        <!-- GLOBAL APPLICATION MODALS -->
+        <!-- Session Detail Modal / View -->
                 <div id="sessionDetailModal" class="modal hidden">
                     <div class="modal-card">
                         <div class="modal-header">
@@ -817,158 +970,7 @@
                         </div>
                     </div>
                 </div>
-            </section>
 
-            <!-- TAB 4: DEVICE (BLE) -->
-            <section id="tabDevice" class="tab-pane">
-                <div class="section-header-row">
-                    <div>
-                        <h2 class="section-title">Connect ECG Device</h2>
-                        <span class="section-sub">Bluetooth Low Energy (BLE) Telemetry</span>
-                    </div>
-                    <button id="openProtocolBtn" class="pill-btn secondary-btn">Protocol UUIDs</button>
-                </div>
-
-                <!-- Bluetooth Status Card -->
-                <div class="card bt-status-card">
-                    <div class="bt-status-left">
-                        <span class="bt-indicator-dot"></span>
-                        <div>
-                            <strong class="bt-label">Bluetooth Hardware Active</strong>
-                            <span class="bt-sub">Ready to pair with medical sensors</span>
-                        </div>
-                    </div>
-                    <button id="scanBleBtn" class="pill-btn primary-btn">
-                        <span id="scanBtnText">Scan for Devices</span>
-                    </button>
-                </div>
-
-                <!-- Connected Hardware Card -->
-                <div id="connectedDeviceBox" class="card connected-device-card hidden">
-                    <div class="conn-header">
-                        <div>
-                            <strong id="connDevName" class="conn-name">ECG-Monitor-01</strong>
-                            <span id="connDevAddr" class="conn-addr">CC:52:90:3A:41:F0</span>
-                        </div>
-                        <span class="connected-badge">CONNECTED</span>
-                    </div>
-                    <div class="conn-actions">
-                        <button id="disconnectBleBtn" class="pill-btn danger-btn">Disconnect</button>
-                        <button id="reconnectBleBtn" class="pill-btn secondary-btn">Reconnect</button>
-                    </div>
-                </div>
-
-                <!-- Discovered Devices List -->
-                <div class="device-section-title">DISCOVERED MEDICAL HARDWARE</div>
-                <div id="deviceList" class="device-list">
-                    <!-- Populated via JS -->
-                </div>
-            </section>
-
-            <!-- TAB 5: SETTINGS -->
-            <section id="tabSettings" class="tab-pane">
-                <div class="section-header-row">
-                    <div>
-                        <h2 class="section-title">System Settings</h2>
-                        <span class="section-sub">ECG Calibration &amp; Security</span>
-                    </div>
-                </div>
-
-                <!-- Demo Mode Toggle -->
-                <div class="card settings-card">
-                    <div class="setting-row">
-                        <div>
-                            <strong class="setting-title">Synthetic Demo Mode</strong>
-                            <p class="setting-desc">Simulate realistic cardiac P-Q-R-S-T telemetry without physical hardware</p>
-                        </div>
-                        <label class="switch">
-                            <input type="checkbox" id="demoModeToggle" checked>
-                            <span class="slider round"></span>
-                        </label>
-                    </div>
-                </div>
-
-                <!-- Display & Grid Settings -->
-                <div class="card settings-card">
-                    <h3 class="settings-group-title">ECG DISPLAY &amp; CALIBRATION</h3>
-
-                    <div class="setting-row">
-                        <div>
-                            <strong class="setting-title">Medical Millimeter Grid</strong>
-                            <p class="setting-desc">Show standard 1mm minor and 5mm major lines</p>
-                        </div>
-                        <label class="switch">
-                            <input type="checkbox" id="gridToggle" checked>
-                            <span class="slider round"></span>
-                        </label>
-                    </div>
-
-                    <div class="setting-row">
-                        <div>
-                            <strong class="setting-title">Trace Phosphor Color</strong>
-                            <p class="setting-desc">Clinical green, electric cyan, or amber</p>
-                        </div>
-                        <select id="colorSelect" class="styled-select">
-                            <option value="#00E676" selected>Phosphor Neon Green</option>
-                            <option value="#00E5FF">Electric Cyan</option>
-                            <option value="#FFD600">Hospital Amber</option>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- Bluetooth Auto Reconnect -->
-                <div class="card settings-card">
-                    <h3 class="settings-group-title">DEVICE CONNECTIVITY</h3>
-                    <div class="setting-row">
-                        <div>
-                            <strong class="setting-title">Auto-Reconnect</strong>
-                            <p class="setting-desc">Automatically reconnect if BLE signal drops</p>
-                        </div>
-                        <label class="switch">
-                            <input type="checkbox" id="autoReconnectToggle" checked>
-                            <span class="slider round"></span>
-                        </label>
-                    </div>
-                </div>
-
-                <!-- Legal & Medical Disclaimer -->
-                <div class="card settings-card">
-                    <h3 class="settings-group-title">MEDICAL SAFETY &amp; LEGAL</h3>
-                    <p class="legal-text">
-                        CardioConnect is a cardiac monitoring interface and data transmission tool. It does NOT diagnose medical conditions, arrhythmia syndromes, or myocardial infarction. Always seek immediate emergency medical care if you or a patient experiences acute cardiovascular symptoms.
-                    </p>
-                    <div class="app-version-tag">Version 1.0.0 (Build 2026) • Non-Diagnostic Prototype</div>
-                </div>
-            </section>
-        </main>
-
-        <!-- Bottom Navigation Bar -->
-        <nav class="bottom-nav">
-            <button class="nav-item active" data-tab="tabDashboard">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
-                <span>Dashboard</span>
-            </button>
-            <button class="nav-item" data-tab="tabPatients">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                <span>Patients</span>
-            </button>
-            <button class="nav-item" data-tab="tabLive">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
-                <span>Live ECG</span>
-            </button>
-            <button class="nav-item" data-tab="tabHistory">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                <span>History</span>
-            </button>
-            <button class="nav-item" data-tab="tabDevice">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6.5 6.5 17.5 17.5 12 23 12 1 17.5 6.5 6.5 17.5"/></svg>
-                <span>Device</span>
-            </button>
-            <button class="nav-item" data-tab="tabSettings">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-                <span>Settings</span>
-            </button>
-        </nav>
     </div>
 
     <!-- External Script -->
